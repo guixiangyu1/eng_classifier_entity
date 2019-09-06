@@ -250,7 +250,7 @@ def export_trimmed_glove_vectors(vocab, glove_filename, trimmed_filename, dim):
         embedding_total = []
         if "ENTITY/" in keyword:
             keyword_index = vocab[keyword]
-            if embeddings[keyword_index] == np.zeros([dim]):
+            if (embeddings[keyword_index] == np.zeros([dim])).all():
                 keyword = keyword.strip('ENTITY/').split("_")
                 for word in keyword:
                     # if word in vocab:
