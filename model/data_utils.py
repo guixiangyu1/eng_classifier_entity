@@ -251,7 +251,7 @@ def export_trimmed_glove_vectors(vocab, glove_filename, trimmed_filename, dim):
         if "ENTITY/" in keyword:
             keyword_index = vocab[keyword]
             if (embeddings[keyword_index] == np.zeros([dim])).all():
-                keyword = keyword.strip('ENTITY/').split("_")
+                keyword = keyword[7:].split("_")
                 for word in keyword:
                     # if word in vocab:
                     #     word_idx = vocab[word]
@@ -302,12 +302,14 @@ def get_processing_word(vocab_words=None, vocab_chars=None,
         # 0. get chars of words
         if vocab_chars is not None and chars == True:
             char_ids = []
-            entity_words = word.strip('ENTITY/').split("_")
-            for entity_word in entity_words:
-                for char in entity_word:
-                    # ignore chars out of vocabulary
-                    if char in vocab_chars:
-                        char_ids += [vocab_chars[char]]      #vocab_chars是个dict， list的+方法，就是往里添加元素[1]+[2]=[1,2]
+            if word.startswith('ENTITY/'):
+                word_for_char = word[7:]
+            else:
+                word_for_char = word
+            # entity_words = word[7:].split("_")
+            for char in word_for_char:
+                if char in vocab_chars:
+                    char_ids += [vocab_chars[char]]      #vocab_chars是个dict， list的+方法，就是往里添加元素[1]+[2]=[1,2]
 
         # 1. preprocess word
         if lowercase and (word.startswith('ENTITY/') is False):
