@@ -243,34 +243,23 @@ def export_trimmed_glove_vectors(vocab, glove_filename, trimmed_filename, dim):
             word = line[0]
             embedding = [float(x) for x in line[1:]]
             if word in vocab:
-                # print(word)
                 word_idx = vocab[word]
                 embeddings[word_idx] = np.asarray(embedding)
-                # print(embeddings[word_idx])
 
-    i = 0
     for keyword in vocab:
         embedding_total = []
         if keyword.startswith('ENTITY/'):
             keyword_index = vocab[keyword]
             if (embeddings[keyword_index] == np.zeros([dim])).all():
-                i += 1
                 keyword = keyword[7:].split("_")
                 for word in keyword:
-                    # if word in vocab:
-                    #     word_idx = vocab[word]
-                    #     embedding_total.append(embeddings[word_idx])
-                    #     embeddings[keyword_index] = np.mean(embedding_total, axis=0)
                     word = word.lower()
                     if word in vocab:
                         word_idx = vocab[word]
-                        print("THERE IS WORD")
                     else:
                         word_idx = vocab["$UNK$"]
                     embedding_total.append(embeddings[word_idx])
                 embeddings[keyword_index] = np.mean(embedding_total, axis=0)
-                print(i)
-                print(embeddings[keyword_index]*100)
 
 
 
