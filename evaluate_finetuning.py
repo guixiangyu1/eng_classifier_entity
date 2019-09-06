@@ -79,18 +79,18 @@ def main():
     model.restore_session(config.dir_model)
 
     # create dataset
-    processing_word = get_processing_word(lowercase=True)
+    # processing_word = get_processing_word(lowercase=True)
 
     if len(sys.argv) == 2:
         if sys.argv[1] == 'test':
-            test = CoNLLDataset(config.filename_test, processing_word)
+            test = CoNLLDataset(config.filename_test)
 
         elif sys.argv[1] == 'dev':
-            test = CoNLLDataset(config.filename_dev, processing_word)
+            test = CoNLLDataset(config.filename_dev)
 
     else:
         assert len(sys.argv) == 1
-        test = CoNLLDataset(config.filename_test, processing_word)
+        test = CoNLLDataset(config.filename_test)
 
     test4cl = CoNLLdata4classifier(test, processing_word=config.processing_word,
                                    processing_tag=config.processing_tag)
