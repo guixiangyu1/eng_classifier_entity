@@ -270,7 +270,7 @@ def export_trimmed_glove_vectors(vocab, glove_filename, trimmed_filename, dim):
                     embedding_total.append(embeddings[word_idx])
                 embeddings[keyword_index] = np.mean(embedding_total, axis=0)
                 print(i)
-                # print(embeddings[keyword_index]*100)
+                print(embeddings[keyword_index]*100)
 
 
 
