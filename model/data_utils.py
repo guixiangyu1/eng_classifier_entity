@@ -302,7 +302,7 @@ def get_processing_word(vocab_words=None, vocab_chars=None,
         # 0. get chars of words
         if vocab_chars is not None and chars == True:
             char_ids = []
-            entity_words = word.split("$@&")
+            entity_words = word.strip('ENTITY/').split("_")
             for entity_word in entity_words:
                 for char in entity_word:
                     # ignore chars out of vocabulary
