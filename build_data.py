@@ -58,7 +58,7 @@ def main():
                 i = i + 1
                 vocab.add(entity)
         else:
-            for word in entity[:7].split('_'):
+            for word in entity[7:].split('_'):
                 if word.lower() in vocab:
                     if entity not in vocab:
                         vocab.add(entity)
