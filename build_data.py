@@ -54,13 +54,15 @@ def main():
     j = 0
     for entity in vocab_entity:
         if entity in vocab_glove:
-            i = i + 1
-            vocab.add(entity)
+            if entity not in vocab:
+                i = i + 1
+                vocab.add(entity)
         else:
             for word in entity.strip('ENTITY/').split('_'):
                 if word.lower() in vocab:
-                    vocab.add(entity)
-                    j = j + 1
+                    if entity not in vocab:
+                        vocab.add(entity)
+                        j = j + 1
                 else:
                     pass
     print(i, j)
