@@ -124,11 +124,12 @@ def entity2vocab(datasets):
 
                 if tag == 'B':
                     if len(chunk) == 0:
-                        chunk = word
+                        chunk = 'ENTITY/' + word
                     else:
                         vocab.add(chunk)
                         chunk = 'ENTITY/' + word
                 if tag == 'I':
+                    assert len(chunk) != 0
                     chunk = chunk + "_" + word
                 if tag == 'O':
                     if len(chunk) != 0:
@@ -247,20 +248,21 @@ def export_trimmed_glove_vectors(vocab, glove_filename, trimmed_filename, dim):
 
     for keyword in vocab:
         embedding_total = []
-        if "$@&" in keyword:
+        if "ENTITY/" in keyword:
             keyword_index = vocab[keyword]
-            keyword = keyword.split("$@&")
-            for word in keyword:
-                # if word in vocab:
-                #     word_idx = vocab[word]
-                #     embedding_total.append(embeddings[word_idx])
-                #     embeddings[keyword_index] = np.mean(embedding_total, axis=0)
-                if word in vocab:
-                    word_idx = vocab[word]
-                else:
-                    word_idx = vocab["$UNK$"]
-                embedding_total.append(embeddings[word_idx])
-                embeddings[keyword_index] = np.mean(embedding_total, axis=0)
+            if embeddings[keyword_index] == np.zeros([dim]):
+                keyword = keyword.strip('ENTITY/').split("_")
+                for word in keyword:
+                    # if word in vocab:
+                    #     word_idx = vocab[word]
+                    #     embedding_total.append(embeddings[word_idx])
+                    #     embeddings[keyword_index] = np.mean(embedding_total, axis=0)
+                    if word in vocab:
+                        word_idx = vocab[word]
+                    else:
+                        word_idx = vocab["$UNK$"]
+                    embedding_total.append(embeddings[word_idx])
+                    embeddings[keyword_index] = np.mean(embedding_total, axis=0)
 
     np.savez_compressed(trimmed_filename, embeddings=embeddings)    #压缩词嵌入到文件中，并且名字为embeddings
 
@@ -308,7 +310,7 @@ def get_processing_word(vocab_words=None, vocab_chars=None,
                         char_ids += [vocab_chars[char]]      #vocab_chars是个dict， list的+方法，就是往里添加元素[1]+[2]=[1,2]
 
         # 1. preprocess word
-        if lowercase:
+        if lowercase and (word.startswith('ENTITY/') is False):
             word = word.lower()
         if word.isdigit():
             word = NUM
@@ -499,9 +501,9 @@ def CoNLLdata4classifier(dataset, processing_word=None, processing_tag=None):
                     masks.append(False)
                 else:
                     if i==ne_start:
-                        entity = raw_words[i]
+                        entity = 'ENTITY/' + raw_words[i]
                     else:
-                        entity = entity + '$@&' + raw_words[i]
+                        entity = entity + '_' + raw_words[i]
 
                     if i==ne_end-1:
                         words.append(processing_word(entity))

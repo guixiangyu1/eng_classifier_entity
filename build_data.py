@@ -50,7 +50,23 @@ def main():
     test = CoNLLDataset(config.filename_test)  # 返回一句话（words），和标签tags
     train = CoNLLDataset(config.filename_train)
     vocab_entity = entity2vocab(datasets=[train, dev, test])
-    vocab.update(vocab_entity)
+    i = 0
+    j = 0
+    for entity in vocab_entity:
+        if entity in vocab_glove:
+            i = i + 1
+            vocab.add(entity)
+        else:
+            for word in entity.strip('ENTITY/').split('_'):
+                if word.lower() in vocab:
+                    vocab.add(entity)
+                    j = j + 1
+                else:
+                    pass
+    print(i, j)
+
+
+    # vocab.update(vocab_entity)
     # vocab = entity2vocab(datasets=[train, dev], vocab=vocab)
 
     # Save vocab
