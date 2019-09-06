@@ -264,12 +264,13 @@ def export_trimmed_glove_vectors(vocab, glove_filename, trimmed_filename, dim):
                     #     embeddings[keyword_index] = np.mean(embedding_total, axis=0)
                     if word in vocab:
                         word_idx = vocab[word]
+                        print("THERE IS WORD")
                     else:
                         word_idx = vocab["$UNK$"]
                     embedding_total.append(embeddings[word_idx])
-                    embeddings[keyword_index] = np.mean(embedding_total, axis=0)
-                    print(i)
-                    print(embeddings[keyword_index])
+                embeddings[keyword_index] = np.mean(embedding_total, axis=0)
+                print(i)
+                print(embeddings[keyword_index])
 
 
 
