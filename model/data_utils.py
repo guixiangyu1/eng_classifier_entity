@@ -243,8 +243,10 @@ def export_trimmed_glove_vectors(vocab, glove_filename, trimmed_filename, dim):
             word = line[0]
             embedding = [float(x) for x in line[1:]]
             if word in vocab:
+                print(word)
                 word_idx = vocab[word]
                 embeddings[word_idx] = np.asarray(embedding)
+                print(embeddings[word_idx])
 
     i = 0
     for keyword in vocab:
